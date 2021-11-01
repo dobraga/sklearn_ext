@@ -6,15 +6,15 @@ authors = ["Douglas Braga <douglasmartinsbraga@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-scikit-learn = "^1.0"
-pandas = "^1.3.4"
-cloudpickle = "^2.0.0"
+scikit-learn = "1.*"
+pandas = "1.*"
+cloudpickle = "2.*"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "5.*"
 mypy = "^0.910"
 black = "^21.9b0"
-jupyterlab = "^3.2.1"
+jupyterlab = "3.*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
