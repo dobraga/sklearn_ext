@@ -9,14 +9,15 @@ class TransformBinary(BaseEstimator, TransformerMixin):
     Create binarized columns using a most relevant value
     """
 
-    def __init__(self, threshold_min=0.75, threshold_max=0.9, fillna="None"):
+    def __init__(self, threshold_min=0.75, threshold_max=0.95, fillna="None"):
         super().__init__()
         self.threshold_min = threshold_min
         self.threshold_max = threshold_max
         self.fillna = fillna
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
-        self.cols_bin_ = []
+        self.cols_bin_ = np.empty(0, dtype="object")
+        self.cols_drop_ = np.empty(0, dtype="object")
         self._to_bin_ = {}
 
         for col in X.select_dtypes(include="object").columns:
@@ -24,9 +25,14 @@ class TransformBinary(BaseEstimator, TransformerMixin):
             most_freq = value_counts.index[0]
             value = value_counts[most_freq]
 
-            if self.threshold_min < value < self.threshold_max:
+            if value >= self.threshold_max:
+                self.cols_drop_ = np.append(self.cols_drop_, col)
+
+            elif self.threshold_min < value < self.threshold_max:
                 self._to_bin_[col] = most_freq
-                self.cols_bin_.append("bin_" + col + "_" + str(most_freq))
+                self.cols_bin_ = np.append(
+                    self.cols_bin_, "bin_" + col + "_" + str(most_freq)
+                )
 
         self.feature_names_in_ = np.array(list(self._to_bin_.keys()))
 
@@ -41,5 +47,5 @@ class TransformBinary(BaseEstimator, TransformerMixin):
 
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
-    def get_feature_names_out(self, input_features=None):
+    def get_feature_names_out(self, input_features=None) -> np.ndarray:
         return self.cols_bin_
