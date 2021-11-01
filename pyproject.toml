@@ -2,7 +2,7 @@
 name = "sklearn_ext"
 version = "0.1.0"
 description = ""
-authors = ["douglasmartinsbraga@gmail.com"]
+authors = ["Douglas Braga <douglasmartinsbraga@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
