@@ -27,13 +27,13 @@ class TransformOthers(BaseEstimator, TransformerMixin):
             if any(aux):
                 self.relevant_values_[col] = list(aux[aux].index)
 
-        self.columns_ = list(self.relevant_values_.keys())
+        self.feature_names_in_ = np.array(list(self.relevant_values_.keys()))
 
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         check_is_fitted(self)
-        new_X = np.empty((X.shape[0], len(self.columns_)), dtype="object")
+        new_X = np.empty((X.shape[0], len(self.feature_names_in_)), dtype="object")
 
         for i, (col, relevant_values) in enumerate(self.relevant_values_.items()):
             new_X[:, i] = X[col].values
@@ -42,4 +42,4 @@ class TransformOthers(BaseEstimator, TransformerMixin):
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
     def get_feature_names_out(self, input_features=None):
-        return self.columns_
+        return self.feature_names_in_

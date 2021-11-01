@@ -28,7 +28,7 @@ class TransformBinary(BaseEstimator, TransformerMixin):
                 self._to_bin_[col] = most_freq
                 self.cols_bin_.append("bin_" + col + "_" + str(most_freq))
 
-        self.feature_names_in_ = np.array(self._to_bin_.keys())
+        self.feature_names_in_ = np.array(list(self._to_bin_.keys()))
 
         return self
 
