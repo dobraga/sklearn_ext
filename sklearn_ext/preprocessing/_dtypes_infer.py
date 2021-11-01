@@ -46,5 +46,5 @@ class DtypesInfer(BaseEstimator, TransformerMixin):
 
         return X
 
-    def get_feature_names_out(self, input_features=None):
+    def get_feature_names_out(self, input_features=None) -> np.ndarray:
         return self.feature_names_in_

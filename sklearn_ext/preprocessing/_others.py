@@ -41,5 +41,5 @@ class TransformOthers(BaseEstimator, TransformerMixin):
 
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
-    def get_feature_names_out(self, input_features=None):
+    def get_feature_names_out(self, input_features=None) -> np.ndarray:
         return self.feature_names_in_

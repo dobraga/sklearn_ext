@@ -29,7 +29,7 @@ class DatetimeEncoder(TransformerMixin, BaseEstimator):
 
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
-    def get_feature_names_out(self, input_features=None):
+    def get_feature_names_out(self, input_features=None) -> np.ndarray:
         features = []
 
         for col in self.feature_names_in_:
@@ -41,4 +41,4 @@ class DatetimeEncoder(TransformerMixin, BaseEstimator):
                 f"{col}_quarter",
             ]
 
-        return features
+        return np.array(features)
