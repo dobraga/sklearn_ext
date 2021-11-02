@@ -14,19 +14,35 @@ class DropIdDuplicated(BaseEstimator, SelectorMixin):
     Search ID add to index, and drop Duplicated columns
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self, cols_index=[], cols_index_features=[], add_datetime_index=True
+    ) -> None:
         super().__init__()
+        self.cols_index = cols_index
+        self.cols_index_features = cols_index_features
+        self.add_datetime_index = add_datetime_index
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
         X = X.copy()
-        self.id_: list[str] = []
-        self.support_: list[bool] = []
+        self.index_: list[str] = []
+        self.index_feature_: list[str] = []
+
+        self.mask_: list[bool] = []
         self.dropped_: list[str] = []
 
         for col in X.columns:
+            if col in self.cols_index_features or (
+                self.add_datetime_index and hasattr(X[col], "dt")
+            ):
+                self.index_feature_.append(col)
+                self.mask_.append(True)
 
-            if (X[col].value_counts() == 1).all():
-                self.id_.append(col)
+            elif col in self.cols_index:
+                self.index_.append(col)
+
+            elif (X[col].value_counts() == 1).all():
+                self.index_.append(col)
+
             else:
                 column_ok = True
                 for col2 in X.columns:
@@ -39,21 +55,28 @@ class DropIdDuplicated(BaseEstimator, SelectorMixin):
                         self.dropped_.append(col)
                         break
 
-                self.support_.append(column_ok)
+                self.mask_.append(column_ok)
 
         self.feature_names_in_ = np.array(X.columns)
-        if self.id_:
-            X = X.set_index(self.id_)
-        self.feature_names_out_ = X.loc[:, self._get_support_mask()].columns.to_numpy()
+        self.feature_names_out_ = self.transform(X).columns.to_numpy()
 
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
-        return X.set_index(self.id_).loc[:, self._get_support_mask()]
+        X = X.copy()
+
+        if self.index_:
+            X = X.set_index(self.index_)
+        if self.index_feature_:
+            X = X.set_index(
+                self.index_feature_, drop=False, append=len(self.index_) > 0
+            )
+
+        return X.loc[:, self._get_support_mask()]
 
     def _get_support_mask(self):
         check_is_fitted(self)
-        return self.support_
+        return self.mask_
 
     def get_feature_names_out(self, input_features=None):
         check_is_fitted(self)
