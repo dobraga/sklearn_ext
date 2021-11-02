@@ -5,7 +5,7 @@ description = ""
 authors = ["Douglas Braga <douglasmartinsbraga@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">3.9"
+python = ">=3.9,<3.11"
 scikit-learn = "1.*"
 pandas = "1.*"
 cloudpickle = "2.*"
