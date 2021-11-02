@@ -3,6 +3,7 @@ from sklearn_ext.preprocessing._ordinal import OrdinalEncoder
 from sklearn_ext.preprocessing._binary import TransformBinary
 from sklearn_ext.preprocessing._others import TransformOthers
 from sklearn_ext.preprocessing._datetime import DatetimeEncoder
+from sklearn_ext.preprocessing._imputer import SimpleImputer
 
 __all__ = [
     "DtypesInfer",
@@ -10,4 +11,5 @@ __all__ = [
     "TransformBinary",
     "TransformOthers",
     "DatetimeEncoder",
+    "SimpleImputer",
 ]
