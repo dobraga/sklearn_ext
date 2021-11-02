@@ -19,6 +19,11 @@ class SimpleImputer(BaseEstimator, TransformerMixin):
             for k, v in self.mapping.items()
             if X.select_dtypes(include=k).shape[1] > 0
         }
+
+        self.feature_names_out_ = np.empty(0, dtype="object")
+        for _, (_, columns) in self.mapping_.items():
+            self.feature_names_out_ = np.append(self.feature_names_out_, columns)
+
         return self
 
     def transform(self, X: pd.DataFrame, y: np.ndarray = None) -> pd.DataFrame:
@@ -30,9 +35,5 @@ class SimpleImputer(BaseEstimator, TransformerMixin):
         return X
 
     def get_feature_names_out(self, input_features=None):
-        names = []
-
-        for _, (_, columns) in self.mapping_.items():
-            names += columns
-
-        return names
+        check_is_fitted(self)
+        return self.feature_names_out_

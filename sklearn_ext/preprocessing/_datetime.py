@@ -1,4 +1,5 @@
 from sklearn.base import TransformerMixin, BaseEstimator
+from sklearn.utils.validation import check_is_fitted
 import pandas as pd
 import numpy as np
 import logging
@@ -12,9 +13,24 @@ class DatetimeEncoder(TransformerMixin, BaseEstimator):
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
         self.feature_names_in_ = np.array(X.columns)
+        self.feature_names_out_ = np.empty(0, dtype="object")
+
+        for col in self.feature_names_in_:
+            self.feature_names_out_ = np.append(
+                self.feature_names_out_,
+                [
+                    f"{col}_year",
+                    f"{col}_week",
+                    f"{col}_day",
+                    f"{col}_month",
+                    f"{col}_quarter",
+                ],
+            )
+
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        check_is_fitted(self)
         new_X = np.zeros((X.shape[0], 0))
 
         for col in self.feature_names_in_:
@@ -30,15 +46,5 @@ class DatetimeEncoder(TransformerMixin, BaseEstimator):
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
     def get_feature_names_out(self, input_features=None) -> np.ndarray:
-        features = []
-
-        for col in self.feature_names_in_:
-            features += [
-                f"{col}_year",
-                f"{col}_week",
-                f"{col}_day",
-                f"{col}_month",
-                f"{col}_quarter",
-            ]
-
-        return np.array(features)
+        check_is_fitted(self)
+        return self.feature_names_out_

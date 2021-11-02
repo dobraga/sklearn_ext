@@ -16,7 +16,7 @@ class TransformBinary(BaseEstimator, TransformerMixin):
         self.fillna = fillna
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
-        self.cols_bin_ = np.empty(0, dtype="object")
+        self.feature_names_out_ = np.empty(0, dtype="object")
         self.cols_drop_ = np.empty(0, dtype="object")
         self._to_bin_ = {}
 
@@ -30,8 +30,8 @@ class TransformBinary(BaseEstimator, TransformerMixin):
 
             elif self.threshold_min < value < self.threshold_max:
                 self._to_bin_[col] = most_freq
-                self.cols_bin_ = np.append(
-                    self.cols_bin_, "bin_" + col + "_" + str(most_freq)
+                self.feature_names_out_ = np.append(
+                    self.feature_names_out_, "bin_" + col + "_" + str(most_freq)
                 )
 
         self.feature_names_in_ = np.array(list(self._to_bin_.keys()))
@@ -48,4 +48,5 @@ class TransformBinary(BaseEstimator, TransformerMixin):
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
     def get_feature_names_out(self, input_features=None) -> np.ndarray:
-        return self.cols_bin_
+        check_is_fitted(self)
+        return self.feature_names_out_

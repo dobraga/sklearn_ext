@@ -28,6 +28,7 @@ class TransformOthers(BaseEstimator, TransformerMixin):
                 self.relevant_values_[col] = list(aux[aux].index)
 
         self.feature_names_in_ = np.array(list(self.relevant_values_.keys()))
+        self.feature_names_out_ = self.feature_names_in_
 
         return self
 
@@ -42,4 +43,5 @@ class TransformOthers(BaseEstimator, TransformerMixin):
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
     def get_feature_names_out(self, input_features=None) -> np.ndarray:
-        return self.feature_names_in_
+        check_is_fitted(self)
+        return self.feature_names_out_

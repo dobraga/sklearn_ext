@@ -18,6 +18,7 @@ class DropIdDuplicated(BaseEstimator, SelectorMixin):
         super().__init__()
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
+        X = X.copy()
         self.id_: list[str] = []
         self.support_: list[bool] = []
         self.dropped_: list[str] = []
@@ -41,6 +42,9 @@ class DropIdDuplicated(BaseEstimator, SelectorMixin):
                 self.support_.append(column_ok)
 
         self.feature_names_in_ = np.array(X.columns)
+        if self.id_:
+            X = X.set_index(self.id_)
+        self.feature_names_out_ = X.loc[:, self._get_support_mask()].columns.to_numpy()
 
         return self
 
@@ -49,5 +53,8 @@ class DropIdDuplicated(BaseEstimator, SelectorMixin):
 
     def _get_support_mask(self):
         check_is_fitted(self)
-
         return self.support_
+
+    def get_feature_names_out(self, input_features=None):
+        check_is_fitted(self)
+        return self.feature_names_out_

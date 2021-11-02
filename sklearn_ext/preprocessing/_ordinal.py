@@ -24,6 +24,7 @@ class OrdinalEncoder(TransformerMixin, BaseEstimator):
         return int(np.argwhere([value == obj for obj in values]))
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
+        self.feature_names_out_ = np.array(list(self.mapping_.keys()))
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
@@ -40,4 +41,4 @@ class OrdinalEncoder(TransformerMixin, BaseEstimator):
         return pd.DataFrame(new_X, columns=self.get_feature_names_out(), index=X.index)
 
     def get_feature_names_out(self, input_features=None) -> np.ndarray:
-        return np.array(list(self.mapping_.keys()))
+        return self.feature_names_out_
