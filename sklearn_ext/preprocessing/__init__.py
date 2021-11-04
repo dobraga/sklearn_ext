@@ -4,6 +4,7 @@ from sklearn_ext.preprocessing._binary import TransformBinary
 from sklearn_ext.preprocessing._others import TransformOthers
 from sklearn_ext.preprocessing._datetime import DatetimeEncoder
 from sklearn_ext.preprocessing._imputer import SimpleImputer
+from sklearn_ext.preprocessing._to_index import ToIndex
 
 __all__ = [
     "DtypesInfer",
@@ -12,4 +13,5 @@ __all__ = [
     "TransformOthers",
     "DatetimeEncoder",
     "SimpleImputer",
+    "ToIndex",
 ]

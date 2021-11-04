@@ -1,3 +1,3 @@
-from sklearn_ext import datasets, preprocessing, feature_selection
+from sklearn_ext import datasets, preprocessing
 
-__all__ = ["datasets", "preprocessing", "feature_selection"]
+__all__ = ["datasets", "preprocessing"]
