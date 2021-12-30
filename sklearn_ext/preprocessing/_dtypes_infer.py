@@ -1,6 +1,6 @@
 from sklearn.utils.validation import check_is_fitted
 from sklearn.base import BaseEstimator, TransformerMixin
-from typing import Callable
+from typing import Callable, Dict
 import pandas as pd
 import numpy as np
 
@@ -22,7 +22,7 @@ class DtypesInfer(BaseEstimator, TransformerMixin):
         super().__init__()
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
-        self.dtypes_: dict[str, Callable] = {}
+        self.dtypes_: Dict[str, Callable] = {}
         self.feature_names_in_: np.ndarray = np.array(X.columns)
 
         for col in X.columns:

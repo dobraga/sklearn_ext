@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from typing import List
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted
 
@@ -19,8 +20,8 @@ class ToIndex(BaseEstimator, TransformerMixin):
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None):
         X = X.copy()
-        self.index_: list[str] = []
-        self.index_feature_: list[str] = []
+        self.index_: List[str] = []
+        self.index_feature_: List[str] = []
 
         for col in X.columns:
             if col in self.cols_index_features or (
